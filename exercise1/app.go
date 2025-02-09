@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
 	var revenue, expense, taxRate float64;
@@ -12,11 +14,17 @@ func main() {
 	fmt.Print("Tax Rate (%%): ")
 	fmt.Scan(&taxRate)
 
-	ebt := revenue - expense
-	profit := ebt * (1 - taxRate/100)
-	ratio := ebt/profit
+	ebt, profit, ratio := calculateFinancials(revenue, expense, taxRate)
 
 	fmt.Printf("Earnings before Tax: %.2f\n", ebt)
 	fmt.Printf("Profit: %.2f\n", profit)
 	fmt.Printf("Ratio: %.2f\n", ratio)
+}
+
+func calculateFinancials(revenue, expense, taxRate float64) (float64,float64, float64) {
+	ebt := revenue - expense
+	profit := ebt * (1 - taxRate/100)
+	ratio := ebt/profit
+
+	return ebt, profit, ratio
 }
