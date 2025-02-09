@@ -1,34 +1,68 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"strconv"
+)
+
+const BANK_FILE_LOCATION = "./resources/balance.txt"
 
 func main() {
-	accountBalance := 1200.0
 
 	for {
 		choice := promptUserAction()
 		switch choice {
+
 		case 1:
+			accountBalance := readBalance()
 			fmt.Println("=============================================")
 			fmt.Printf("Your balance is %.2f\n", accountBalance)
 			fmt.Println("=============================================")
-		case 2:
-			accountBalance = withdrawAction(accountBalance)
-			fmt.Println("=============================================")
 
+		case 2:
+			accountBalance := readBalance()
+			accountBalance = withdrawAction(accountBalance)
+			saveBalance(accountBalance)
+			fmt.Println("=============================================")
 			fmt.Printf("Your remaining balance is %.2f\n", accountBalance)
 			fmt.Println("=============================================")
+
 		case 3:
+			accountBalance := readBalance()
 			accountBalance = depositAction(accountBalance)
+			saveBalance(accountBalance)
 			fmt.Println("=============================================")
 			fmt.Printf("Your updated balance is %.2f\n", accountBalance)
 			fmt.Println("=============================================")
+
 		default:
 			fmt.Println("=============================================")
 			fmt.Println("Thank you for banking with us!")
 			fmt.Println("=============================================")
 			return
 		}
+	}
+}
+
+func readBalance() float64 {
+	data, error := os.ReadFile(BANK_FILE_LOCATION)
+	if error != nil {
+		panic("Unable to retrieve current balance.")
+	}
+
+	balance, parseError := strconv.ParseFloat(string(data), 64)
+	if parseError != nil {
+		panic("Corrupted data detected on file")
+	}
+	return balance
+}
+
+func saveBalance(balance float64) {
+	balanceText := fmt.Sprintf("%.2f", balance)
+	error := os.WriteFile(BANK_FILE_LOCATION, []byte(balanceText), 0644)
+	if error != nil {
+		panic("Error writing to file")
 	}
 }
 
