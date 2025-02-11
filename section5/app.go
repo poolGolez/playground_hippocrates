@@ -4,18 +4,20 @@ import (
 	"fmt"
 
 	"example.com/bank-account/repository"
+	"example.com/bank-account/service"
 )
 
 const BANK_FILE_LOCATION = "./resources/balance.txt"
 
 func main() {
+	account := service.FetchAccount("12345")
 
 	for {
 		choice := promptUserAction()
 		switch choice {
 
 		case 1:
-			accountBalance := readBalance()
+			accountBalance := account.Balance
 			fmt.Println("=============================================")
 			fmt.Printf("Your balance is %.2f\n", accountBalance)
 			fmt.Println("=============================================")
