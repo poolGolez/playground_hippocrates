@@ -5,7 +5,7 @@ import (
 	"example.com/bank-account/repository"
 )
 
-func FetchAccount(id string) domain.Account {
+func FetchAccount(id string) *domain.Account {
 	return repository.Find(id)
 }
 

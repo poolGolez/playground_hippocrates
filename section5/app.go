@@ -10,6 +10,7 @@ const BANK_FILE_LOCATION = "./resources/balance.txt"
 
 func main() {
 	account := service.FetchAccount("12345")
+	// TODO: Check if not found
 
 	for {
 		choice := promptUserAction()
@@ -26,7 +27,7 @@ func main() {
 			fmt.Print("Enter amount to withdraw:")
 			fmt.Scan(&amount)
 
-			updatedAccount := service.Withdraw(account, amount)
+			updatedAccount := service.Withdraw(*account, amount)
 			fmt.Println("=============================================")
 			fmt.Printf("Your remaining balance is %.2f\n", updatedAccount.Balance)
 			fmt.Println("=============================================")
@@ -36,7 +37,7 @@ func main() {
 			fmt.Print("Enter amount to deposit:")
 			fmt.Scan(&amount)
 
-			updatedAccount := service.Deposit(account, amount)
+			updatedAccount := service.Deposit(*account, amount)
 			fmt.Println("=============================================")
 			fmt.Printf("Your updated balance is %.2f\n", updatedAccount.Balance)
 			fmt.Println("=============================================")

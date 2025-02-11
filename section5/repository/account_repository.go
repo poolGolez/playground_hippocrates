@@ -1,14 +1,44 @@
 package repository
 
-import "example.com/bank-account/domain"
+import (
+	"encoding/csv"
+	"os"
+	"strconv"
 
-const BANK_FILE_LOCATION = "./resources/balance.txt"
+	"example.com/bank-account/domain"
+)
 
-func Find(id string) domain.Account {
+const ACCOUNTS_TABLE = "./resources/accounts-table.csv"
 
-	return domain.Account{
-		Id:      "12345",
-		Balance: 1200.00,
+func Find(id string) *domain.Account {
+	file, err := os.Open(ACCOUNTS_TABLE)
+	if err != nil {
+		panic("Error opening the file")
+	}
+	defer file.Close()
+
+	reader := csv.NewReader(file)
+	records, err := reader.ReadAll()
+	if err != nil {
+		panic("Error reading from file")
+	}
+
+	var targetRow []string = nil
+	for i, record := range records {
+		if record[0] == id {
+			targetRow = record
+		}
+	}
+
+	if targetRow == nil {
+		return nil
+	}
+
+	balance, _ := strconv.ParseFloat(targetRow[1], 64)
+
+	return &domain.Account{
+		Id:      targetRow[0],
+		Balance: balance,
 	}
 }
 
