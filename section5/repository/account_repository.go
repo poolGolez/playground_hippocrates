@@ -11,3 +11,7 @@ func Find(id string) domain.Account {
 		Balance: 1200.00,
 	}
 }
+
+func Update(account domain.Account) domain.Account {
+	return account
+}
