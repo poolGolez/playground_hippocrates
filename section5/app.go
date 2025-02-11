@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 
-	"example.com/bank-account/repository"
 	"example.com/bank-account/service"
 )
 
@@ -23,19 +22,23 @@ func main() {
 			fmt.Println("=============================================")
 
 		case 2:
-			accountBalance := readBalance()
-			accountBalance = withdrawAction(accountBalance)
-			saveBalance(accountBalance)
+			var amount float64
+			fmt.Print("Enter amount to withdraw:")
+			fmt.Scan(&amount)
+
+			updatedAccount := service.Withdraw(account, amount)
 			fmt.Println("=============================================")
-			fmt.Printf("Your remaining balance is %.2f\n", accountBalance)
+			fmt.Printf("Your remaining balance is %.2f\n", updatedAccount.Balance)
 			fmt.Println("=============================================")
 
 		case 3:
-			accountBalance := readBalance()
-			accountBalance = depositAction(accountBalance)
-			saveBalance(accountBalance)
+			var amount float64
+			fmt.Print("Enter amount to deposit:")
+			fmt.Scan(&amount)
+
+			updatedAccount := service.Deposit(account, amount)
 			fmt.Println("=============================================")
-			fmt.Printf("Your updated balance is %.2f\n", accountBalance)
+			fmt.Printf("Your updated balance is %.2f\n", updatedAccount.Balance)
 			fmt.Println("=============================================")
 
 		default:
@@ -45,14 +48,6 @@ func main() {
 			return
 		}
 	}
-}
-
-func readBalance() float64 {
-	return repository.ReadFromFile(BANK_FILE_LOCATION)
-}
-
-func saveBalance(balance float64) {
-	repository.WriteToFile(balance, BANK_FILE_LOCATION)
 }
 
 func promptUserAction() int {
@@ -74,20 +69,4 @@ func promptUserAction() int {
 	}
 
 	return choice
-}
-
-func withdrawAction(accountBalance float64) float64 {
-	var amount float64
-	fmt.Print("Enter amount to withdraw:")
-	fmt.Scan(&amount)
-
-	return accountBalance - amount
-}
-
-func depositAction(accountBalance float64) float64 {
-	var amount float64
-	fmt.Print("Enter amount to deposit:")
-	fmt.Scan(&amount)
-
-	return accountBalance + amount
 }
