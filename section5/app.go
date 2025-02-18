@@ -9,11 +9,12 @@ import (
 const BANK_FILE_LOCATION = "./resources/balance.txt"
 
 func main() {
-	account := service.FetchAccount("12345")
-	// TODO: Check if not found
-
 	for {
 		choice := promptUserAction()
+
+		// TODO: Check if not found
+		account := service.FetchAccount("12345")
+
 		switch choice {
 
 		case 1:
