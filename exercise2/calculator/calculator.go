@@ -26,3 +26,11 @@ func (params LoanParameters) CalculatePayment() float64 {
 	denominator := math.Pow(1+monthlyInterestRate, float64(params.MonthsPayable())) - 1
 	return params.LoanAmount * (numerator / denominator)
 }
+
+func (params LoanParameters) CalculateTotalInterest() float64 {
+	return (params.CalculatePayment() * float64(params.MonthsPayable())) - params.LoanAmount
+}
+
+func (params LoanParameters) CalculateInterestToPrincipalRatio() float64 {
+	return params.CalculateTotalInterest() / params.LoanAmount
+}

@@ -14,6 +14,8 @@ func main() {
 	fmt.Println(schedule)
 
 	fmt.Printf("Regular Payment per month: %.2f\n", inputs.CalculatePayment())
+	fmt.Printf("Total Loan Interest: %.2f\n", inputs.CalculateTotalInterest())
+	fmt.Printf("Interest to Principal Ratio: %.2f\n", inputs.CalculateInterestToPrincipalRatio())
 }
 
 func getInputs() calc.LoanParameters {
