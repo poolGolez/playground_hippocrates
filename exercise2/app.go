@@ -25,8 +25,8 @@ func main() {
 			remainingBalance = schedule[month-1][2]
 		}
 
-		interest := remainingBalance * interestDecimal
-		paidToPrincipal := payment - interest
+		interest := remainingBalance * inputs.InterestDecimal()
+		paidToPrincipal := inputs.CalculatePayment() - interest
 		schedule[month][0] = interest
 		schedule[month][1] = paidToPrincipal
 		schedule[month][2] = remainingBalance - paidToPrincipal
