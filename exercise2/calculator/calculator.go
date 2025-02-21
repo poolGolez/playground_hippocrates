@@ -12,13 +12,17 @@ func (params LoanParameters) MonthsPayable() int64 {
 	return params.YearsPayable * 12
 }
 
-func (params LoanParameters) InterestDecimal() float64 {
+func (params LoanParameters) AnnualInterestRate() float64 {
 	return params.InterestPercent / 100
 }
 
+func (params LoanParameters) MonthlyInterestRate() float64 {
+	return params.AnnualInterestRate() / 12
+}
+
 func (params LoanParameters) CalculatePayment() float64 {
-	monthlyInterestRate := params.InterestDecimal() / 12
-	numerator := params.LoanAmount * monthlyInterestRate * math.Pow(1+monthlyInterestRate, float64(params.MonthsPayable()))
+	monthlyInterestRate := params.MonthlyInterestRate()
+	numerator := monthlyInterestRate * math.Pow(1+monthlyInterestRate, float64(params.MonthsPayable()))
 	denominator := math.Pow(1+monthlyInterestRate, float64(params.MonthsPayable())) - 1
-	return numerator / denominator
+	return params.LoanAmount * (numerator / denominator)
 }
