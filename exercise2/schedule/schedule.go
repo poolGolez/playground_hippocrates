@@ -5,7 +5,7 @@ import (
 )
 
 func CalculateSchedule(params clc.LoanParameters) Schedule {
-	rows := make([]ScheduleRow, params.MonthsPayable())
+	rows := make([]scheduleRow, params.MonthsPayable())
 	payment := params.CalculatePayment()
 
 	for i := 0; i < len(rows); i++ {
@@ -16,24 +16,24 @@ func CalculateSchedule(params clc.LoanParameters) Schedule {
 			grossBalance = rows[i-1].RemainingBalance
 		}
 		interest := grossBalance * params.MonthlyInterestRate()
-
-		rows[i] = ScheduleRow{
+		paidToPrincipal := payment - interest
+		rows[i] = scheduleRow{
 			PaidToInterest:   interest,
-			PaidToPrincipal:  payment - interest,
-			RemainingBalance: grossBalance - payment,
+			PaidToPrincipal:  paidToPrincipal,
+			RemainingBalance: grossBalance - paidToPrincipal,
 		}
 	}
 
 	return Schedule{
-		rows: rows,
+		Rows: rows,
 	}
 }
 
 type Schedule struct {
-	rows []ScheduleRow
+	Rows []scheduleRow
 }
 
-type ScheduleRow struct {
+type scheduleRow struct {
 	PaidToInterest   float64
 	PaidToPrincipal  float64
 	RemainingBalance float64

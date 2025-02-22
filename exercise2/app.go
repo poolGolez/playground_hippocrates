@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	calc "example.com/amortization/calculator"
+	renderer "example.com/amortization/renderer"
 	sched "example.com/amortization/schedule"
 )
 
@@ -11,11 +12,11 @@ func main() {
 	inputs := getInputs()
 
 	schedule := sched.CalculateSchedule(inputs)
-	fmt.Println(schedule)
+	fmt.Println(renderer.Format(schedule))
 
-	fmt.Printf("Regular Payment per month: %.2f\n", inputs.CalculatePayment())
-	fmt.Printf("Total Loan Interest: %.2f\n", inputs.CalculateTotalInterest())
-	fmt.Printf("Interest to Principal Ratio: %.2f\n", inputs.CalculateInterestToPrincipalRatio())
+	fmt.Printf("Regular Payment per month: %s\n", renderer.FormatMoney(inputs.CalculatePayment()))
+	fmt.Printf("Total Loan Interest: %s\n", renderer.FormatMoney(inputs.CalculateTotalInterest()))
+	fmt.Printf("Interest to Principal Ratio: %s\n", renderer.FormatMoney(inputs.CalculateInterestToPrincipalRatio()))
 }
 
 func getInputs() calc.LoanParameters {
