@@ -9,12 +9,18 @@ import (
 type Task func()
 
 func main() {
-	tasks := *createTasks(5)
+	tasksRef, channelsRef := createTasks(5)
+	tasks, channels := *tasksRef, *channelsRef
 
 	durationStart := time.Now()
 	for _, task := range tasks {
-		task()
+		go task()
 	}
+
+	for _, channel := range channels {
+		<-channel
+	}
+
 	durationEnd := time.Now()
 
 	duration := durationEnd.Sub(durationStart)
@@ -22,21 +28,26 @@ func main() {
 	fmt.Printf("Total Process Time: %.2f second(s)\n", duration.Seconds())
 }
 
-func createTasks(count int) *[]Task {
+func createTasks(count int) (*[]Task, *[]chan bool) {
 	tasks := make([]Task, count)
+	channels := make([]chan bool, count)
+
 	for i := range tasks {
 		name := fmt.Sprintf("Task %d", i)
-		tasks[i] = createTask(name)
+		channel := make(chan bool)
+
+		channels[i] = channel
+		tasks[i] = createTask(name, channel)
 	}
-	return &tasks
+	return &tasks, &channels
 }
 
-func createTask(name string) func() {
-	duration := time.Duration(rand.Intn(4)+1) * time.Second
-
+func createTask(name string, channel chan bool) Task {
+	duration := time.Duration(rand.Intn(5)+1) * time.Second
 	return func() {
 		fmt.Printf("[%s] Executing task in %7.2f second(s)...\n", name, duration.Seconds())
 		time.Sleep(duration)
+		channel <- true
 		fmt.Printf("[%s] Task successfully executed...\n", name)
 	}
 }
