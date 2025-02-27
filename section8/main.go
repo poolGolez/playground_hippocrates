@@ -6,21 +6,29 @@ import (
 	"time"
 )
 
+type Job func(chan int64)
+
 func main() {
 	fmt.Println("Play concurrency with GoRoutines!")
+
+	jobCount := 20
 	start := time.Now()
 
-	job1 := createJob("Job 1")
-	job2 := createJob("Job 2")
+	jobs := make([]Job, jobCount)
+	channels := make([]chan int64, jobCount)
+	for i := range jobs {
+		name := fmt.Sprintf("Job %d", (i + 1))
+		jobs[i] = createJob(name)
+		channels[i] = make(chan int64)
+	}
 
-	channel1 := make(chan int64)
-	channel2 := make(chan int64)
+	for index, job := range jobs {
+		go job(channels[index])
+	}
 
-	go job1(channel1)
-	go job2(channel2)
-
-	<-channel1
-	<-channel2
+	for _, channel := range channels {
+		<-channel
+	}
 
 	end := time.Now()
 	elapsedTime := end.Sub(start)
@@ -29,10 +37,10 @@ func main() {
 
 func createJob(name string) func(chan int64) {
 	return func(channel chan int64) {
-		duration := rand.Int63n(5) + 2
-		fmt.Printf("Executing %s for %d seconds...\n", name, duration)
+		duration := rand.Int63n(10) + 1
+		fmt.Printf(">>> Executing %s [%d seconds]...\n", name, duration)
 		time.Sleep(time.Duration(duration) * time.Second)
-		fmt.Printf("Done %s...\n", name)
+		fmt.Printf("  <<<Done %s [%d seconds]...\n", name, duration)
 
 		channel <- duration
 	}
