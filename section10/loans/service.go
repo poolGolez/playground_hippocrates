@@ -1,4 +1,4 @@
-package loan
+package loans
 
 var loans []Loan = []Loan{
 	{
@@ -13,6 +13,11 @@ var loans []Loan = []Loan{
 	},
 }
 
-func FetchAllLoans() []Loan {
+func FetchAll() []Loan {
 	return loans
+}
+
+func Save(loan *Loan) *Loan {
+	loans = append(loans, *loan)
+	return loan
 }
