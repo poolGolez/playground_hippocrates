@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"example.com/gin/loaney/loan"
+	"example.com/gin/loaney/loans"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +15,7 @@ func main() {
 
 	server.GET("/", helloWorld)
 	server.GET("/loans", listLoans)
+	server.POST("/loans", createLoan)
 
 	server.Run()
 }
@@ -24,6 +25,18 @@ func helloWorld(ctx *gin.Context) {
 }
 
 func listLoans(ctx *gin.Context) {
-	loans := loan.FetchAllLoans()
+	loans := loans.FetchAll()
 	ctx.JSON(http.StatusOK, loans)
+}
+
+func createLoan(ctx *gin.Context) {
+	var loan loans.Loan
+	if err := ctx.ShouldBindJSON(&loan); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Malformed request", "message": err})
+		return
+	}
+
+	loans.Save(&loan)
+
+	ctx.JSON(http.StatusCreated, loan)
 }
