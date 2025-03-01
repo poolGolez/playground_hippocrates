@@ -2,7 +2,6 @@ package routes
 
 import (
 	"net/http"
-	"strconv"
 
 	"example.com/gin/loaney/loans"
 	"github.com/gin-gonic/gin"
@@ -14,14 +13,8 @@ func listLoans(ctx *gin.Context) {
 }
 
 func fetchLoan(ctx *gin.Context) {
-	id, _ := strconv.ParseInt(ctx.Param("id"), 10, 64)
-	loan := loans.FetchById(id)
-	if loan == nil {
-		ctx.JSON(http.StatusNotFound, nil)
-		return
-	}
-
-	ctx.JSON(http.StatusOK, *loan)
+	loan, _ := ctx.Get("X-Loan")
+	ctx.JSON(http.StatusOK, loan)
 }
 
 func createLoan(ctx *gin.Context) {
@@ -34,4 +27,9 @@ func createLoan(ctx *gin.Context) {
 	loans.Save(&loan)
 
 	ctx.JSON(http.StatusCreated, loan)
+}
+
+func updateLoan(ctx *gin.Context) {
+	loan, _ := ctx.Get("X-Loan")
+	ctx.JSON(http.StatusOK, loan)
 }
