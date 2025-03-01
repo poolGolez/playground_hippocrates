@@ -87,14 +87,9 @@ func find(id int64) *Loan {
 	FROM loans
 	WHERE id = ?;
 	`
-	result, _ := DB.Query(sql, id)
-	defer result.Close()
+	result := DB.QueryRow(sql, id)
 
-	if result.Next() {
-		var loan Loan
-		result.Scan(&loan.Id, &loan.Principal, &loan.AnnualInterestRate, &loan.YearsPayable)
-		return &loan
-	}
-
-	return nil
+	var loan Loan
+	result.Scan(&loan.Id, &loan.Principal, &loan.AnnualInterestRate, &loan.YearsPayable)
+	return &loan
 }
