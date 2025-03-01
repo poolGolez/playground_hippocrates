@@ -42,13 +42,7 @@ func save(loan *Loan) error {
 	VALUES(?, ?, ?);
 	`
 
-	stmt, err := DB.Prepare(sql)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-
-	result, err := stmt.Exec(loan.Principal, loan.AnnualInterestRate, loan.YearsPayable)
+	result, err := DB.Exec(sql, loan.Principal, loan.AnnualInterestRate, loan.YearsPayable)
 	if err != nil {
 		return err
 	}
@@ -93,12 +87,7 @@ func find(id int64) *Loan {
 	FROM loans
 	WHERE id = ?;
 	`
-	stmt, err := DB.Prepare(sql)
-	if err != nil {
-		panic("SQL error when preparing statement.")
-	}
-
-	result, _ := stmt.Query(id)
+	result, _ := DB.Query(sql, id)
 	defer result.Close()
 
 	if result.Next() {
