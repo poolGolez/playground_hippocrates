@@ -14,7 +14,7 @@ var loans []Loan = []Loan{
 }
 
 func FetchAll() []Loan {
-	return loans
+	return findAll()
 }
 
 func Save(loan *Loan) *Loan {

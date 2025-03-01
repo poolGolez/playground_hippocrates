@@ -61,8 +61,28 @@ func save(loan *Loan) error {
 	return nil
 }
 
-// func findAll():[]Loan {
-// 	sql := `
-// 	SELECT id, principal
-// 	`
-// }
+func findAll() []Loan {
+	sql := `
+	SELECT  principal, annual_interest_rate, years_payable
+	FROM loans; 
+	`
+
+	rows, err := DB.Query(sql)
+	if err != nil {
+		panic("Failed querying loans.")
+	}
+	defer rows.Close()
+
+	var results []Loan
+	for rows.Next() {
+		var loan Loan
+		err = rows.Scan(&loan.Principal, &loan.AnnualInterestRate, &loan.YearsPayable)
+		if err != nil {
+			panic("Failed querying loans.")
+		}
+
+		results = append(results, loan)
+	}
+
+	return results
+}
