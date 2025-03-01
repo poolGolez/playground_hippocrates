@@ -48,22 +48,22 @@ func save(loan *Loan) error {
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(loan.Principal, loan.AnnualInterestRate, loan.YearsPayable)
+	result, err := stmt.Exec(loan.Principal, loan.AnnualInterestRate, loan.YearsPayable)
 	if err != nil {
 		return err
 	}
 
-	// loan.id, err = result.LastInsertId()
-	// if err != nil {
-	// 	return err
-	// }
+	loan.Id, err = result.LastInsertId()
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
 func findAll() []Loan {
 	sql := `
-	SELECT  principal, annual_interest_rate, years_payable
+	SELECT id, principal, annual_interest_rate, years_payable
 	FROM loans; 
 	`
 
@@ -76,7 +76,7 @@ func findAll() []Loan {
 	var results []Loan
 	for rows.Next() {
 		var loan Loan
-		err = rows.Scan(&loan.Principal, &loan.AnnualInterestRate, &loan.YearsPayable)
+		err = rows.Scan(&loan.Id, &loan.Principal, &loan.AnnualInterestRate, &loan.YearsPayable)
 		if err != nil {
 			panic("Failed querying loans.")
 		}
