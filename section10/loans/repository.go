@@ -1,40 +1,8 @@
 package loans
 
 import (
-	"database/sql"
-
-	_ "github.com/mattn/go-sqlite3"
+	"example.com/gin/loaney/db"
 )
-
-var DB *sql.DB
-
-func InitDB() {
-	var err error
-	DB, err = sql.Open("sqlite3", "loans.db")
-	if err != nil {
-		panic("Unable to connect to database.")
-	}
-
-	DB.SetMaxOpenConns(10)
-	DB.SetMaxIdleConns(5)
-
-	createTables()
-}
-
-func createTables() {
-	sql := `
-		CREATE TABLE IF NOT EXISTS loans (
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			principal DECIMAL(19, 6) NOT NULL,
-			annual_interest_rate DECIMAL(19, 6) NOT NULL,
-			years_payable INT NOT NULL
-		);
-	`
-	_, err := DB.Exec(sql)
-	if err != nil {
-		panic("Could not initialize Loans table.")
-	}
-}
 
 func save(loan *Loan) error {
 	sql := `
@@ -42,7 +10,7 @@ func save(loan *Loan) error {
 	VALUES(?, ?, ?);
 	`
 
-	result, err := DB.Exec(sql, loan.Principal, loan.AnnualInterestRate, loan.YearsPayable)
+	result, err := db.DB.Exec(sql, loan.Principal, loan.AnnualInterestRate, loan.YearsPayable)
 	if err != nil {
 		return err
 	}
@@ -61,13 +29,13 @@ func findAll() []Loan {
 	FROM loans; 
 	`
 
-	rows, err := DB.Query(sql)
+	rows, err := db.DB.Query(sql)
 	if err != nil {
 		panic("Failed querying loans.")
 	}
 	defer rows.Close()
 
-	var results []Loan
+	var results = make([]Loan, 0)
 	for rows.Next() {
 		var loan Loan
 		err = rows.Scan(&loan.Id, &loan.Principal, &loan.AnnualInterestRate, &loan.YearsPayable)
@@ -87,9 +55,12 @@ func find(id int64) *Loan {
 	FROM loans
 	WHERE id = ?;
 	`
-	result := DB.QueryRow(sql, id)
+	result := db.DB.QueryRow(sql, id)
 
 	var loan Loan
-	result.Scan(&loan.Id, &loan.Principal, &loan.AnnualInterestRate, &loan.YearsPayable)
+	err := result.Scan(&loan.Id, &loan.Principal, &loan.AnnualInterestRate, &loan.YearsPayable)
+	if err != nil {
+		return nil
+	}
 	return &loan
 }

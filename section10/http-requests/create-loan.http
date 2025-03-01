@@ -1,9 +1,8 @@
-
 POST http://localhost:8080/loans
 Content-Type: : application/json
 
 {
   "principal": 5200000 ,
   "annualInterestRate": 0.0722,
-  "yearsPayable": 25
+  "yearsPayable": 10
 }
