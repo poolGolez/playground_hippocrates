@@ -5,12 +5,11 @@ import (
 	"net/http"
 
 	"example.com/gin/loaney/loans"
-	db "example.com/gin/loaney/loans/repository"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	db.InitDB()
+	loans.InitDB()
 
 	fmt.Println("Creating Gin Server for Loans...")
 	server := gin.Default()

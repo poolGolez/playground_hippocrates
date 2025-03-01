@@ -19,5 +19,6 @@ func FetchAll() []Loan {
 
 func Save(loan *Loan) *Loan {
 	loans = append(loans, *loan)
+	save(loan)
 	return loan
 }

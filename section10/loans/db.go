@@ -1,4 +1,4 @@
-package repository
+package loans
 
 import (
 	"database/sql"
@@ -35,3 +35,34 @@ func createTables() {
 		panic("Could not initialize Loans table.")
 	}
 }
+
+func save(loan *Loan) error {
+	sql := `
+	INSERT INTO loans (principal, annual_interest_rate, years_payable)
+	VALUES(?, ?, ?);
+	`
+
+	stmt, err := DB.Prepare(sql)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(loan.Principal, loan.AnnualInterestRate, loan.YearsPayable)
+	if err != nil {
+		return err
+	}
+
+	// loan.id, err = result.LastInsertId()
+	// if err != nil {
+	// 	return err
+	// }
+
+	return nil
+}
+
+// func findAll():[]Loan {
+// 	sql := `
+// 	SELECT id, principal
+// 	`
+// }
