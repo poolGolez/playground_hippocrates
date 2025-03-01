@@ -86,3 +86,26 @@ func findAll() []Loan {
 
 	return results
 }
+
+func find(id int64) *Loan {
+	sql := `
+	SELECT id, principal, annual_interest_rate, years_payable
+	FROM loans
+	WHERE id = ?;
+	`
+	stmt, err := DB.Prepare(sql)
+	if err != nil {
+		panic("SQL error when preparing statement.")
+	}
+
+	result, _ := stmt.Query(id)
+	defer result.Close()
+
+	if result.Next() {
+		var loan Loan
+		result.Scan(&loan.Id, &loan.Principal, &loan.AnnualInterestRate, &loan.YearsPayable)
+		return &loan
+	}
+
+	return nil
+}
