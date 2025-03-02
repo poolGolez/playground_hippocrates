@@ -16,11 +16,27 @@ func save(loan *Loan) error {
 	}
 
 	loan.Id, err = result.LastInsertId()
-	if err != nil {
-		return err
-	}
+	return err
+}
 
-	return nil
+func update(loan *Loan) error {
+	sql := `
+	UPDATE loans SET
+	principal = ?,
+	annual_interest_rate =?,
+	years_payable = ?
+	WHERE id = ?
+	`
+
+	_, err := db.DB.Exec(
+		sql,
+		loan.Principal,
+		loan.AnnualInterestRate,
+		loan.YearsPayable,
+		loan.Id,
+	)
+
+	return err
 }
 
 func findAll() []Loan {

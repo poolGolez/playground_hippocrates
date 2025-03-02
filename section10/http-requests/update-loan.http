@@ -2,7 +2,7 @@ PUT http://localhost:8080/loans/1
 Content-Type: : application/json
 
 {
-  "principalx": 2500001.00,
+  "principal": 2500000.00,
   "annualInterestRate": 0.00675,
-  "yearsPayable": 20
+  "yearsPayable": 10
 }

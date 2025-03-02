@@ -18,7 +18,7 @@ func Update(loan *Loan, params *UpdateLoanParams) *Loan {
 	loan.AnnualInterestRate = params.AnnualInterestRate
 	loan.YearsPayable = params.YearsPayable
 
-	// update(loan)
+	update(loan)
 	return loan
 }
 
