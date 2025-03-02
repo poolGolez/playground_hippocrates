@@ -30,6 +30,15 @@ func createLoan(ctx *gin.Context) {
 }
 
 func updateLoan(ctx *gin.Context) {
-	loan, _ := ctx.Get("X-Loan")
-	ctx.JSON(http.StatusOK, loan)
+	loan := ctx.MustGet("X-Loan").(*loans.Loan)
+
+	var params loans.UpdateLoanParams
+	if err := ctx.ShouldBindJSON(&params); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, nil)
+		return
+	}
+
+	loans.Update(loan, &params)
+
+	ctx.JSON(http.StatusOK, params)
 }

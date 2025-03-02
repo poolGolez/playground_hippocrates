@@ -22,15 +22,13 @@ func RegisterRoutes(server *gin.Engine) {
 func getLoan(ctx *gin.Context) {
 	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Invalid loan ID"})
-		ctx.Abort()
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "Invalid loan ID"})
 		return
 	}
 
 	loan := loans.FetchById(id)
 	if loan == nil {
-		ctx.JSON(http.StatusNotFound, nil)
-		ctx.Abort()
+		ctx.AbortWithStatusJSON(http.StatusNotFound, nil)
 		return
 	}
 	ctx.Set("X-Loan", loan)
