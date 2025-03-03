@@ -16,6 +16,7 @@ func RegisterRoutes(server *gin.Engine) {
 	{
 		group.GET("", fetchLoan)
 		group.PUT("", updateLoan)
+		group.DELETE("", deleteLoan)
 	}
 }
 

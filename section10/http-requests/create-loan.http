@@ -3,6 +3,6 @@ Content-Type: : application/json
 
 {
   "principal": 5200000 ,
-  "annualInterestRate": 0.0722,
+  "annualInterestRate": 0.0675,
   "yearsPayable": 10
 }

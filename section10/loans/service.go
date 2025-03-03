@@ -22,6 +22,10 @@ func Update(loan *Loan, params *UpdateLoanParams) *Loan {
 	return loan
 }
 
+func Delete(loan *Loan) {
+	delete(loan)
+}
+
 type UpdateLoanParams struct {
 	Principal          float64 `binding:"required"`
 	AnnualInterestRate float64 `binding:"required"`

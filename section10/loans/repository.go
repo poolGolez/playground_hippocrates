@@ -39,6 +39,13 @@ func update(loan *Loan) error {
 	return err
 }
 
+func delete(loan *Loan) error {
+	sql := "DELETE FROM loans WHERE id = ?;"
+
+	_, err := db.DB.Exec(sql, loan.Id)
+	return err
+}
+
 func findAll() []Loan {
 	sql := `
 	SELECT id, principal, annual_interest_rate, years_payable

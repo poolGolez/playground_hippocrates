@@ -42,3 +42,10 @@ func updateLoan(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, params)
 }
+
+func deleteLoan(ctx *gin.Context) {
+	loan := ctx.MustGet("X-Loan").(*loans.Loan)
+	loans.Delete(loan)
+
+	ctx.JSON(http.StatusNoContent, nil)
+}
