@@ -9,6 +9,8 @@ import (
 )
 
 func RegisterRoutes(server *gin.Engine) {
+	server.POST("/users/register", RegisterUser)
+
 	server.GET("/loans", listLoans)
 	server.POST("/loans", createLoan)
 
