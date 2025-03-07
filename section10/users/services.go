@@ -1,6 +1,10 @@
 package users
 
-import "time"
+import (
+	"time"
+
+	"example.com/gin/loaney/utils"
+)
 
 func Login(params LoginParams) *User {
 	user, err := findByUsername(params.Username)
@@ -15,7 +19,7 @@ func Login(params LoginParams) *User {
 func Register(params RegisterUserParams) (*User, error) {
 	user := &User{
 		Username:       params.Username,
-		Password:       params.Password,
+		Password:       utils.Hash(params.Password),
 		DateRegistered: time.Now(),
 	}
 
