@@ -1,8 +1,6 @@
 package users
 
 import (
-	"fmt"
-
 	"example.com/gin/loaney/db"
 )
 
@@ -12,10 +10,7 @@ func findByUsername(username string) (*User, error) {
 	FROM users
 	WHERE username = ?;
 	`
-	fmt.Println("Username: (before)", username)
-
 	row := db.DB.QueryRow(sql, username)
-	fmt.Println("Username:", username)
 
 	var user User
 	var dateString string
