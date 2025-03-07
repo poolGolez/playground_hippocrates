@@ -10,6 +10,7 @@ import (
 
 func RegisterRoutes(server *gin.Engine) {
 	server.POST("/users/register", RegisterUser)
+	server.POST("/users/login", Login)
 
 	server.GET("/loans", listLoans)
 	server.POST("/loans", createLoan)

@@ -2,6 +2,16 @@ package users
 
 import "time"
 
+func Login(params LoginParams) *User {
+	user, err := findByUsername(params.Username)
+
+	if err != nil {
+		panic("Error encountered during login.")
+	}
+
+	return user
+}
+
 func Register(params RegisterUserParams) (*User, error) {
 	user := &User{
 		Username:       params.Username,
@@ -15,6 +25,11 @@ func Register(params RegisterUserParams) (*User, error) {
 	}
 
 	return user, nil
+}
+
+type LoginParams struct {
+	Username string `binding:"required"`
+	Password string `binding:"required"`
 }
 
 type RegisterUserParams struct {
