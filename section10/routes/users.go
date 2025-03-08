@@ -10,9 +10,9 @@ import (
 func Login(ctx *gin.Context) {
 	var params users.LoginParams
 	ctx.ShouldBindJSON(&params)
-	user := users.Login(params)
+	jwt := users.Login(params)
 
-	ctx.JSON(http.StatusOK, gin.H{"user": user})
+	ctx.JSON(http.StatusOK, gin.H{"jwt": jwt})
 }
 
 func RegisterUser(ctx *gin.Context) {

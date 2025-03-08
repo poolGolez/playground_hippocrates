@@ -6,7 +6,7 @@ import (
 	"example.com/gin/loaney/utils"
 )
 
-func Login(params LoginParams) *User {
+func Login(params LoginParams) string {
 	user, err := findByUsername(params.Username)
 
 	if err != nil {
@@ -17,7 +17,9 @@ func Login(params LoginParams) *User {
 		panic("Invalid username/password credentials.")
 	}
 
-	return user
+	jwt := GenerateAuthToken(user)
+
+	return jwt
 }
 
 func Register(params RegisterUserParams) (*User, error) {
