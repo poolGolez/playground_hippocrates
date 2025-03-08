@@ -5,4 +5,5 @@ type Loan struct {
 	Principal          float64 `binding:"required"`
 	AnnualInterestRate float64 `binding:"required"`
 	YearsPayable       int     `binding:"required"`
+	UserId             int64
 }

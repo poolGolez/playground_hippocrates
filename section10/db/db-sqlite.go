@@ -38,7 +38,7 @@ func createLoansTable() error {
 			principal DECIMAL(19, 6) NOT NULL,
 			annual_interest_rate DECIMAL(19, 6) NOT NULL,
 			years_payable INT NOT NULL,
-			user_id INTEGER REFERENCES users(id)
+			user_id INTEGER NOT NULL REFERENCES users(id)
 		);
 	`
 	_, err := DB.Exec(sql)

@@ -6,11 +6,16 @@ import (
 
 func save(loan *Loan) error {
 	sql := `
-	INSERT INTO loans (principal, annual_interest_rate, years_payable)
-	VALUES(?, ?, ?);
+	INSERT INTO loans (principal, annual_interest_rate, years_payable, user_id)
+	VALUES(?, ?, ?, ?);
 	`
 
-	result, err := db.DB.Exec(sql, loan.Principal, loan.AnnualInterestRate, loan.YearsPayable)
+	result, err := db.DB.Exec(sql,
+		loan.Principal,
+		loan.AnnualInterestRate,
+		loan.YearsPayable,
+		loan.UserId,
+	)
 	if err != nil {
 		return err
 	}
