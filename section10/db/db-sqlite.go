@@ -22,12 +22,12 @@ func InitDB() {
 }
 
 func createTables() {
-	if err := createLoansTable(); err != nil {
-		panic("Could not initialize Loans table.")
-	}
-
 	if err := createUsersTable(); err != nil {
 		panic("Could not initialize Users table.")
+	}
+
+	if err := createLoansTable(); err != nil {
+		panic("Could not initialize Loans table.")
 	}
 }
 
@@ -37,7 +37,8 @@ func createLoansTable() error {
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			principal DECIMAL(19, 6) NOT NULL,
 			annual_interest_rate DECIMAL(19, 6) NOT NULL,
-			years_payable INT NOT NULL
+			years_payable INT NOT NULL,
+			user_id INTEGER REFERENCES users(id)
 		);
 	`
 	_, err := DB.Exec(sql)
@@ -48,7 +49,7 @@ func createUsersTable() error {
 	sql := `
 		CREATE TABLE IF NOT EXISTS users (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			username TEXT NOT NULL,
+			username TEXT NOT NULL UNIQUE,
 			password TEXT NOT NULL,
 			date_registered TIMESTAMPTZ NOT NULL
 		);
