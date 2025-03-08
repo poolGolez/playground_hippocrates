@@ -13,6 +13,10 @@ func Login(params LoginParams) string {
 		panic("Error encountered during login.")
 	}
 
+	if user == nil {
+		panic("Unauthorized error.")
+	}
+
 	if !utils.CompareHash(user.Password, params.Password) {
 		panic("Invalid username/password credentials.")
 	}
