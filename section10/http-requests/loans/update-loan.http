@@ -1,5 +1,6 @@
 PUT http://localhost:8080/loans/1
 Content-Type: : application/json
+Authorization: Bearer <jwt>
 
 {
   "principal": 2500000.00,

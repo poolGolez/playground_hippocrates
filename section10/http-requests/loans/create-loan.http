@@ -1,5 +1,6 @@
 POST http://localhost:8080/loans
 Content-Type: : application/json
+Authorization: Bearer <jwt>
 
 {
   "principal": 5200000 ,
