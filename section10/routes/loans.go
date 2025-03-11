@@ -24,6 +24,8 @@ func createLoan(ctx *gin.Context) {
 		return
 	}
 
+	currentUser := GetCurrentUser(ctx)
+	loan.UserId = currentUser.UserId
 	loans.Save(&loan)
 
 	ctx.JSON(http.StatusCreated, loan)

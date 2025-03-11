@@ -10,7 +10,6 @@ func FetchById(id int64) *Loan {
 
 func Save(loan *Loan) *Loan {
 	save(loan)
-	loan.UserId = 1 //TODO: Retrieve from JWT
 
 	return loan
 }
