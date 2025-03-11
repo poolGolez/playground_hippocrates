@@ -1,7 +1,7 @@
 package users
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -18,8 +18,32 @@ func GenerateAuthToken(user *User) string {
 	jwtString, err := token.SignedString([]byte(PRIVATE_KEY))
 
 	if err != nil {
-		fmt.Println(err)
 		panic("Error generating JWT token")
 	}
 	return jwtString
+}
+
+func DecodeJwt(token string) (*CurrentUser, error) {
+	decodedJwt, _ := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		_, ok := token.Method.(*jwt.SigningMethodHMAC)
+
+		if !ok {
+			return nil, errors.New("Unable to decode JWT token")
+		}
+
+		return []byte(PRIVATE_KEY), nil
+	})
+
+	jwtClaims, ok := decodedJwt.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, errors.New("Invalid JWT token")
+	}
+
+	return &CurrentUser{
+		UserId: int64(jwtClaims["x-userId"].(float64)),
+	}, nil
+}
+
+type CurrentUser struct {
+	UserId int64
 }

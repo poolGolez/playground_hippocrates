@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"example.com/gin/loaney/loans"
+	mw "example.com/gin/loaney/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,10 +13,12 @@ func RegisterRoutes(server *gin.Engine) {
 	server.POST("/users/register", RegisterUser)
 	server.POST("/users/login", Login)
 
-	server.GET("/loans", listLoans)
-	server.POST("/loans", createLoan)
+	authGroup := server.Group("/loans")
+	authGroup.Use(mw.Authenticate)
+	authGroup.GET("/", listLoans)
+	authGroup.POST("/", createLoan)
 
-	group := server.Group("/loans/:id").Use(getLoan)
+	group := authGroup.Group("/:id").Use(getLoan)
 	{
 		group.GET("", fetchLoan)
 		group.PUT("", updateLoan)
